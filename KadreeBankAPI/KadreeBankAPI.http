@@ -1,0 +1,6 @@
+@KadreeBankAPI_HostAddress = http://localhost:5221
+
+GET {{KadreeBankAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

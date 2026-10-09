@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="KadreeBankAPI/KadreeBankAPI.csproj" />
+  <Project Path="KadreeBankApplication/KadreeBankApplication.csproj" />
+  <Project Path="KadreeBankDomain/KadreeBankDomain.csproj" />
+  <Project Path="KadreeBankInfrastructure/KadreeBankInfrastructure.csproj" />
+</Solution>
