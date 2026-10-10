@@ -4,6 +4,7 @@ using KadreeBankApplication.Interfaces.Repositories;
 using KadreeBankInfrastructure.Persistence;
 using KadreeBankInfrastructure.Persistence.Respositories;
 using Microsoft.EntityFrameworkCore;
+using KadreeBankAPI.Middleware;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,6 +65,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+
+app.UseApiExceptionHandler();
 
 app.UseAuthorization();
 

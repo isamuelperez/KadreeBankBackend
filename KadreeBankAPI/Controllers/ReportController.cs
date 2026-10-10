@@ -3,15 +3,15 @@ using KadreeBankApplication.Features.Reports.GetMonthlyAccountStatement;
 using KadreeBankApplication.Features.Reports.GetMonthlyCustomerTransactions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using KadreeBankAPI.Models;
 
 namespace KadreeBankAPI.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class ReportController(ISender sender) : ControllerBase
+    public class ReportController(ISender sender) : BaseApiController
     {
         [HttpGet("monthly-customer-transactions")]
-        public async Task<IActionResult> GetMonthlyCustomerTransactions(
+        public async Task<ActionResult<ApiResponse>> GetMonthlyCustomerTransactions(
             [FromQuery] int year,
             [FromQuery] int month,
             CancellationToken cancellationToken)
@@ -20,22 +20,22 @@ namespace KadreeBankAPI.Controllers
                 new GetMonthlyCustomerTransactionsQuery(year, month),
                 cancellationToken);
 
-            return Ok(report);
+            return Success(report);
         }
 
         [HttpGet("out-of-city-withdrawals")]
-        public async Task<IActionResult> GetOutOfCityWithdrawals(
+        public async Task<ActionResult<ApiResponse>> GetOutOfCityWithdrawals(
      CancellationToken cancellationToken)
         {
             var report = await sender.Send(
                 new GetHighValueOutOfCityWithdrawalsQuery(),
                 cancellationToken);
 
-            return Ok(report);
+            return Success(report);
         }
 
         [HttpGet("monthly-account-statement/{accountId:guid}")]
-        public async Task<IActionResult> GetMonthlyAccountStatement(
+        public async Task<ActionResult<ApiResponse>> GetMonthlyAccountStatement(
             Guid accountId,
             [FromQuery] int year,
             [FromQuery] int month,
@@ -44,7 +44,7 @@ namespace KadreeBankAPI.Controllers
             var statement = await sender.Send(
                 new GetMonthlyAccountStatementQuery(accountId, year, month), cancellationToken);
 
-            return Ok(statement);
+            return Success(statement);
         }
     }
 }

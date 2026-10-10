@@ -3,20 +3,20 @@ using KadreeBankApplication.Features.Accounts.Queries.GetAccountByAccountNumber;
 using KadreeBankApplication.Features.Accounts.Queries.GetAccountById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using KadreeBankAPI.Models;
 
 namespace KadreeBankAPI.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
 
-    public class AccountController(ISender sender) : ControllerBase
+    public class AccountController(ISender sender) : BaseApiController
     {
         [HttpPost]
-        public async Task<IActionResult> Open([FromBody] OpenAccountCommand command, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse>> Open([FromBody] OpenAccountCommand command, CancellationToken cancellationToken)
         {
             Guid accountId = await sender.Send(command, cancellationToken);
 
-            return CreatedAtAction(
+            return CreatedAtActionResponse(
                 nameof(GetById),
                 new { id = accountId },
                 new { id = accountId }
@@ -24,21 +24,26 @@ namespace KadreeBankAPI.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse>> GetById(Guid id, CancellationToken cancellationToken)
         {
             var account = await sender.Send(new GetAccountByIdQuery(id), cancellationToken);
 
-            return Ok(account);
+            return Success(account);
         }
 
         [HttpGet("{accountNumber}")]
-        public async Task<IActionResult> GetByAccountNumber(string accountNumber, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiResponse>> GetByAccountNumber(string accountNumber, CancellationToken cancellationToken)
         {
             var account = await sender.Send(
                 new GetAccountByAccountNumberQuery(accountNumber),
                 cancellationToken);
 
-            return Ok(account);
+            if (account is null)
+            {
+                return NotFoundResponse($"No se encontró una cuenta con el número '{accountNumber}'.");
+            }
+
+            return Success(account);
         }
     }
 }

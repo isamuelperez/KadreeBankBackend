@@ -1,9 +1,6 @@
 ﻿using KadreeBankApplication.Features.Accounts.Queries.GetAccountById;
 using KadreeBankApplication.Interfaces;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace KadreeBankApplication.Features.Accounts.Queries.GetAccountByAccountNumber
 {
@@ -20,8 +17,7 @@ namespace KadreeBankApplication.Features.Accounts.Queries.GetAccountByAccountNum
 
             if (account is null)
             {
-                throw new KeyNotFoundException(
-                    $"No se encontró una cuenta con el número '{request.AccountNumber}'.");
+                return null!;
             }
 
             return new AccountDetailsDto(
