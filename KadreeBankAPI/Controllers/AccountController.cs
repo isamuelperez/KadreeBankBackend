@@ -1,4 +1,5 @@
 ﻿using KadreeBankApplication.Features.Accounts.Commands.OpenAccount;
+using KadreeBankApplication.Features.Accounts.Queries.GetAccountByAccountNumber;
 using KadreeBankApplication.Features.Accounts.Queries.GetAccountById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,16 @@ namespace KadreeBankAPI.Controllers
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             var account = await sender.Send(new GetAccountByIdQuery(id), cancellationToken);
+
+            return Ok(account);
+        }
+
+        [HttpGet("{accountNumber}")]
+        public async Task<IActionResult> GetByAccountNumber(string accountNumber, CancellationToken cancellationToken)
+        {
+            var account = await sender.Send(
+                new GetAccountByAccountNumberQuery(accountNumber),
+                cancellationToken);
 
             return Ok(account);
         }
